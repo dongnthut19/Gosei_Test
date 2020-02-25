@@ -1,50 +1,50 @@
-<div class="input-group mb-3">
-  <input type="text" class="form-control" ngModel="txtKey" placeholder="Search for first name, last name" aria-label="Search for first name, last name" aria-describedby="basic-addon2">
-  <div class="input-group-append">
-    <button class="btn btn-outline-secondary" type="button">Search</button>
+
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" [(ngModel)] = "txtKey"  placeholder="Search for first name, last name" aria-label="Search for first name, last name" aria-describedby="basic-addon2">
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary" type="button" (click)="getEmployee()">Search</button>
+    </div>
   </div>
-</div>
-<div class="clearfix">
-  <button class="btn btn-primary float-right mb-1">Add</button>
-</div>
+  <div class="clearfix">
+    <button class="btn btn-primary float-right mb-1" (click)="redirectToCreate()">Add</button>
+  </div>
 
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col" style="cursor: pointer;" (click)="doSort('FirstName')">First Name</th>
-      <th scope="col" style="cursor: pointer;" (click)="doSort('LastName')">Last Name</th>
-      <th scope="col">Gender</th>
-      <th scope="col">birth Date </th>
-      <th scope="col">Email Adress</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let item of employees | paginate: { id: 'employee',
-                                                    itemsPerPage: pageSize,
-                                                    currentPage: currentPage,
-                                                    totalItems: total }">
-      <th scope="row">{{item.id}}</th>
-      <td><a [routerLink]="">{{item.firstName}}</a></td>
-      <td>{{item.lastName}}</td>
-      <td>{{item.gender}}</td>
-      <td>{{item.birthDate | date:'dd/MM/yyyy'}}</td>
-      <td>{{item.email}}</td>
-      <td>
-        <button (click)="openConfirmationDialog(item.id)" class="btn btn-danger">Delete</button>
-      </td>
-    </tr>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col" style="cursor: pointer;" (click)="doSort('FirstName')">First Name</th>
+        <th scope="col" style="cursor: pointer;" (click)="doSort('LastName')">Last Name</th>
+        <th scope="col">Gender</th>
+        <th scope="col">birth Date </th>
+        <th scope="col">Email Adress</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of employees | paginate: { id: 'employee',
+                                                      itemsPerPage: pageSize,
+                                                      currentPage: currentPage,
+                                                      totalItems: total }">
+        <th scope="row">{{item.id}}</th>
+        <td><a [routerLink]="">{{item.firstName}}</a></td>
+        <td>{{item.lastName}}</td>
+        <td>{{item.gender}}</td>
+        <td>{{item.birthDate | date:'dd/MM/yyyy'}}</td>
+        <td>{{item.email}}</td>
+        <td>
+          <button (click)="openConfirmationDialog(item.id)" class="btn btn-danger">Delete</button>
+        </td>
+      </tr>
 
-  </tbody>
-</table>
-<div class="text-center">
-  <pagination-controls  id="employee"
-    (pageChange)="pageChanged($event)"
-    directionLinks="true"
-    autoHide="true"
-    previousLabel="Previous"
-    nextLabel="Next">
-  </pagination-controls>
-</div>
-
+    </tbody>
+  </table>
+  <div class="text-center">
+    <pagination-controls  id="employee"
+      (pageChange)="pageChanged($event)"
+      directionLinks="true"
+      autoHide="true"
+      previousLabel="Previous"
+      nextLabel="Next">
+    </pagination-controls>
+  </div>

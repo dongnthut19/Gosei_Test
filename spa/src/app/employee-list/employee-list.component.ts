@@ -63,4 +63,8 @@ export class EmployeeListComponent implements OnInit {
     });
   }
 
+  redirectToCreate() {
+
+  }
+
 }
