@@ -49,6 +49,7 @@ namespace api
 
             // service
             services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IEmployeeQualificationService, EmployeeQualificationService>();
 
             services.AddCors();
 

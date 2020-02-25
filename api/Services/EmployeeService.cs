@@ -4,6 +4,7 @@ using api.Data.Infrastructure;
 using api.Data.Repositories;
 using api.Models;
 using api.Models.Dtos;
+using api.Models.Enums;
 
 namespace api.Services
 {
@@ -17,7 +18,8 @@ namespace api.Services
 
         Task<List<Employee>> GetAll();
 
-        Task<ListResultDto<Employee>> GetAllPaging(int page, int pageSize);
+        Task<ListResultDto<Employee>> GetAllPaging(string txtFirstOrLastName, string orderByField,
+            string sortOrder, int page, int pageSize);
 
         ValueTask<Employee> GetById(int id);
 
@@ -49,10 +51,58 @@ namespace api.Services
             return await _employeeRepository.GetAll();
         }
 
-        public async Task<ListResultDto<Employee>> GetAllPaging(int page, int pageSize)
+        public async Task<ListResultDto<Employee>> GetAllPaging(string txtFirstOrLastName, string orderByField,
+            string sortOrder, int page, int pageSize)
         {
-            var totalRow = await  _employeeRepository.Count();
-            var items = await _employeeRepository.GetMultiPaging(null, page, pageSize);
+            txtFirstOrLastName = txtFirstOrLastName.ToLower();
+            var totalRow = await _employeeRepository.Count();
+
+            var orderClause = new IOrderByClause<Employee>[] {
+                new OrderByClause<Employee, int>(one=> one.Id, SortDirection.Ascending)
+            };
+
+            if (sortOrder == "Asc") {
+                if (orderByField == "FirstName") {
+                    orderClause = new IOrderByClause<Employee>[] {
+                            new OrderByClause<Employee, string>(one=> one.FirstName, SortDirection.Ascending)
+                        };
+                }
+                else if (orderByField == "LastName") 
+                {
+                    orderClause = new IOrderByClause<Employee>[] {
+                                                new OrderByClause<Employee, string>(one=> one.LastName, SortDirection.Ascending)
+                                            };
+                }
+            }
+            else
+            {
+                if (sortOrder == "Desc") {
+                    if (orderByField == "FirstName") {
+                        orderClause = new IOrderByClause<Employee>[] {
+                                new OrderByClause<Employee, string>(one=> one.FirstName, SortDirection.Descending)
+                            };
+                    }
+                    else if (orderByField == "LastName") 
+                    {
+                        orderClause = new IOrderByClause<Employee>[] {
+                                                    new OrderByClause<Employee, string>(one=> one.LastName, SortDirection.Descending)
+                                                };
+                    }
+                }
+            }
+
+            var items = await _employeeRepository.GetMultiSortingPaging(
+                x => x.FirstName.ToLower().Contains(txtFirstOrLastName) || x.LastName.ToLower().Contains(txtFirstOrLastName),
+                orderClause, 
+                page, pageSize, null);
+
+            if (string.IsNullOrEmpty(txtFirstOrLastName) || txtFirstOrLastName == "null") {
+                items = await _employeeRepository.GetMultiSortingPaging(
+                    null,
+                    orderClause, 
+                    page, pageSize, null);
+
+            }
             return new ListResultDto<Employee>()
             {
                 Total = totalRow,
@@ -62,7 +112,7 @@ namespace api.Services
 
         public async ValueTask<Employee> GetById(int id)
         {
-            return await _employeeRepository.GetSingleById(id);
+            return await _employeeRepository.GetSingleByCondition(x => x.Id == id, new string[] { "EmployeeQualification" });
         }
         
         public void Update(Employee model)

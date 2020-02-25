@@ -130,11 +130,57 @@ namespace api.Data.Infrastructure
             }
 
             _resetSet = skipCount == 0 ? _resetSet.Take(size) : _resetSet.Skip(skipCount).Take(size);
-            var total = await _resetSet.CountAsync();
+            // var total = await _resetSet.CountAsync();
             var items = await _resetSet.AsQueryable().ToListAsync();
             return items;
         }
+        
+        public async Task<List<T>> GetMultiSortingPaging(
+            Expression<Func<T, bool>> whereClause = null,
+            IOrderByClause<T>[] orderBy = null,
+            int skip = 0,
+            int top = 20,
+            string[] include = null)
+        {
 
+            int skipCount = skip * top;
+            IQueryable<T> data = _EmployeeQualificationContext.Set<T>();
+            // handle where
+            if (whereClause != null)
+            {
+                data = data.Where(whereClause);
+            }
+
+            //handle order by
+            if (orderBy != null)
+            {
+                bool isFirstSort = true;
+                orderBy.ToList().ForEach(one =>
+                {
+                    data = one.ApplySort(data, isFirstSort);
+                    isFirstSort = false;
+                });
+            }
+
+            // handle paging
+            if (skip > 0)
+            {
+                data = data.Skip(skipCount);
+            }
+            if (top > 0)
+            {
+                data = data.Take(top);
+            }
+
+            //handle includes
+            if (include != null)
+            {
+                include.ToList().ForEach(one => data = data.Include(one));
+            }
+
+            var items = await data.AsQueryable().ToListAsync();
+            return items;
+        }
         public async Task<bool> CheckContains(Expression<Func<T, bool>> predicate)
         {
             int count = await _EmployeeQualificationContext.Set<T>().CountAsync<T>(predicate);

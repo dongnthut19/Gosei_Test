@@ -33,6 +33,13 @@ namespace api.Data.Infrastructure
 
         Task<List<T>> GetMultiPaging(Expression<Func<T, bool>> filter, int index = 0, int size = 50, string[] includes = null);
 
+        Task<List<T>> GetMultiSortingPaging(
+            Expression<Func<T, bool>> whereClause = null,
+            IOrderByClause<T>[] orderBy = null,
+            int skip = 0,
+            int top = 0,
+            string[] includes = null);
+
         Task<int> Count();
 
         Task<bool> CheckContains(Expression<Func<T, bool>> predicate);
