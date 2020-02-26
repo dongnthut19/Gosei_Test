@@ -1,1 +1,57 @@
-<p>employee-addedit works!</p>
+<div class="card" style="min-width: 500px;">
+  <div class="card-body">
+    <form [formGroup]="angForm" novalidate>
+      <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input type="text" class="form-control" id="firstName" aria-describedby="firstName" placeholder="First Name" formControlName="FirstName"
+        #FirstName>
+      </div>
+      <div *ngIf="angForm.controls['FirstName'].invalid && (angForm.controls['FirstName'].dirty || angForm.controls['FirstName'].touched)" class="alert alert-danger">
+        <div *ngIf="angForm.controls['FirstName'].errors.required">
+          First Name is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="middleName">Middle Name</label>
+        <input type="text" class="form-control" id="middleName" placeholder="Middle Name" formControlName="MiddleName" #MiddleName>
+      </div>
+      <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input type="text" class="form-control" id="lastName" placeholder="Last Name" formControlName="LastName"
+        #LastName>
+      </div>
+      <div *ngIf="angForm.controls['LastName'].invalid && (angForm.controls['LastName'].dirty || angForm.controls['LastName'].touched)" class="alert alert-danger">
+        <div *ngIf="angForm.controls['LastName'].errors.required">
+          Last Name is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <select type="text" class="form-control" formControlName="Gender" #Gender>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="birthDate">Birth Date</label>
+        <input class="form-control" placeholder="yyyy/mm/dd"
+                 name="dp" formControlName="BirthDate" (click)="d.toggle()" #BirthDate ngbDatepicker #d="ngbDatepicker">
+      </div>
+      <div *ngIf="angForm.controls['BirthDate'].invalid && (angForm.controls['BirthDate'].dirty || angForm.controls['BirthDate'].touched)" class="alert alert-danger">
+        <div *ngIf="angForm.controls['BirthDate'].errors.required">
+          Birth Date is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="note">Note</label>
+        <textarea class="form-control" rows = 7 cols = "5" formControlName="Note" #Note></textarea>
+      </div>
+      <button class="btn" (click)="cancel()">Cancel</button>
+      <button type="submit" (click)="accept()" [disabled]="!angForm.valid" class="btn btn-primary">Accept</button>
+    </form>
+  </div>
+</div>
+

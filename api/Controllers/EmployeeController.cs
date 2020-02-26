@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Helpers;
+using api.Models;
 using api.Models.Dtos;
 using api.Services;
 using AutoMapper;
@@ -38,6 +40,25 @@ namespace api.Controllers
                 total = obj.Total,
                 items = itemsToReturn
             });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var obj = await _employeeService.GetById(id);
+            var itemToReturn = _mapper.Map<EmployeeDto>(obj);
+
+            return Ok(itemToReturn);
+        }
+
+        [HttpPost]
+        public IActionResult Add(EmployeeDto employee)
+        {
+            var newItem = new Employee();
+            newItem.UpdateEmployee(employee);
+            _employeeService.Add(newItem);
+            _employeeService.SaveChanges();
+            return CreatedAtAction(nameof(GetById), new { id = employee.Id }, employee);
         }
 
         [HttpDelete("{id}")]

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { EmployeeService } from '../services/employee.service';
 import { ConfirmationDialogService } from '../services/confirmation-dialog.service';
 import EmployeeModel from '../models/employee-model';
@@ -19,7 +20,8 @@ export class EmployeeListComponent implements OnInit {
   txtKey = null;
 
   constructor(private employeeService: EmployeeService,
-              private confirmationDialogService: ConfirmationDialogService) { }
+              private confirmationDialogService: ConfirmationDialogService,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.getEmployee();
@@ -64,7 +66,11 @@ export class EmployeeListComponent implements OnInit {
   }
 
   redirectToCreate() {
-
+    this.router.navigate(['employees/create']).then( (e) => {
+      if (e) {
+        console.log('Navigation is successful!');
+      }
+    });
   }
 
 }

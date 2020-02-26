@@ -6,7 +6,7 @@ import { EmployeeAddeditComponent } from './employee-addedit/employee-addedit.co
 
 const routes: Routes = [
   {
-    path: 'employeesCreate',
+    path: 'employees/create',
     component: EmployeeAddeditComponent
   },
   // {

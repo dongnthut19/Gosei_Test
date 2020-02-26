@@ -4,6 +4,8 @@ import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './app-routing.module';
 import { EmployeeService } from './services/employee.service';
@@ -26,7 +28,9 @@ import { EmployeeAddeditComponent } from './employee-addedit/employee-addedit.co
     SlimLoadingBarModule,
     NgxPaginationModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
+    NgbModule
   ],
   providers: [
     EmployeeService,
