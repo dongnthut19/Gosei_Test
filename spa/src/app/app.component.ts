@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 import { NavigationCancel,
  Event,
@@ -12,7 +12,7 @@ import { NavigationCancel,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Employee';
 
   constructor(private loadingBar: SlimLoadingBarService, private router: Router) {
@@ -20,6 +20,15 @@ export class AppComponent {
       this.navigationInterceptor(event);
     });
   }
+
+  ngOnInit(): void {
+    this.router.navigate(['employees']).then( (e) => {
+      if (e) {
+        console.log('Navigation is successful!');
+      }
+    });
+  }
+
   private navigationInterceptor(event: Event): void {
     if (event instanceof NavigationStart) {
       this.loadingBar.start();
