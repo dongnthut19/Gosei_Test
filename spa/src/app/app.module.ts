@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { AppRoutingModule } from './app-routing.module';
 import { EmployeeService } from './services/employee.service';
@@ -27,14 +27,14 @@ import { EmployeeAddeditComponent } from './employee-addedit/employee-addedit.co
   imports: [
     BrowserModule,
     AppRoutingModule,
-    SlimLoadingBarModule,
     NgxPaginationModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
     BrowserAnimationsModule, // required animations module
-    ToastrModule.forRoot() // ToastrModule added
+    ToastrModule.forRoot(), // ToastrModule added,
+    NgxSpinnerModule
   ],
   providers: [
     EmployeeService,

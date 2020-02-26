@@ -36,7 +36,7 @@ namespace api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<EmployeeQualificationContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("ITVConnectString")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectString")));
 
             // Auto Mapper Configurations
             services.AddAutoMapper(typeof(AutoMapperProfiles));
@@ -78,6 +78,7 @@ namespace api
                         }
                     });
                 });
+                app.UseHsts();
             }
 
             // app.UseHttpsRedirection();

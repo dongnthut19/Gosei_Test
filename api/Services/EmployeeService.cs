@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using api.Data.Infrastructure;
@@ -54,7 +55,7 @@ namespace api.Services
         public async Task<ListResultDto<Employee>> GetAllPaging(string txtFirstOrLastName, string orderByField,
             string sortOrder, int page, int pageSize)
         {
-            txtFirstOrLastName = txtFirstOrLastName.ToLower();
+            
             var totalRow = await _employeeRepository.Count();
 
             var orderClause = new IOrderByClause<Employee>[] {
@@ -92,15 +93,16 @@ namespace api.Services
             }
 
             var items = await _employeeRepository.GetMultiSortingPaging(
-                x => x.FirstName.ToLower().Contains(txtFirstOrLastName) || x.LastName.ToLower().Contains(txtFirstOrLastName),
-                orderClause, 
-                page, pageSize, null);
-
-            if (string.IsNullOrEmpty(txtFirstOrLastName) || txtFirstOrLastName == "null") {
-                items = await _employeeRepository.GetMultiSortingPaging(
                     null,
                     orderClause, 
                     page, pageSize, null);
+
+            if (!String.IsNullOrEmpty(txtFirstOrLastName) && txtFirstOrLastName != "null") {
+                txtFirstOrLastName = txtFirstOrLastName.ToLower();
+                items = await _employeeRepository.GetMultiSortingPaging(
+                x => x.FirstName.ToLower().Contains(txtFirstOrLastName) || x.LastName.ToLower().Contains(txtFirstOrLastName),
+                orderClause, 
+                page, pageSize, null);
 
             }
             return new ListResultDto<Employee>()

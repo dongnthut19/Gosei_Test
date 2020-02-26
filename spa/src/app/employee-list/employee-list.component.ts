@@ -4,6 +4,7 @@ import { EmployeeService } from '../services/employee.service';
 import { ConfirmationDialogService } from '../services/confirmation-dialog.service';
 import EmployeeModel from '../models/employee-model';
 import { ToastrService } from 'ngx-toastr';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-employee-list',
@@ -23,19 +24,22 @@ export class EmployeeListComponent implements OnInit {
   constructor(private employeeService: EmployeeService,
               private confirmationDialogService: ConfirmationDialogService,
               private router: Router,
-              private toastr: ToastrService) { }
+              private toastr: ToastrService,
+              private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
     this.getEmployee();
   }
 
   getEmployee(page?: number) {
+    this.spinner.show();
     page = page || 0;
     this.employeeService
       .listEmployee(this.txtKey, this.sortField, this.sortOrder, page, this.pageSize)
       .subscribe((data: any) => {
         this.employees = data.items;
         this.total = data.total;
+        this.spinner.hide();
     });
   }
 
@@ -62,9 +66,11 @@ export class EmployeeListComponent implements OnInit {
   }
 
   deleteEmployee(employeeId: number) {
+    this.spinner.show();
     this.employeeService.deleteEmployee(employeeId).subscribe(data => {
       this.getEmployee(this.currentPage);
       this.toastr.success('Delete Employee is successful!', 'Success');
+      this.spinner.hide();
     });
   }
 

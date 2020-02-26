@@ -5,6 +5,7 @@ import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { EmployeeService } from '../services/employee.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-employee-addedit',
@@ -27,7 +28,8 @@ export class EmployeeAddeditComponent implements OnInit {
               private datePipe: DatePipe,
               config: NgbModalConfig,
               private modalService: NgbModal,
-              private toastr: ToastrService) {
+              private toastr: ToastrService,
+              private spinner: NgxSpinnerService) {
     this.createForm();
     config.backdrop = 'static';
     config.keyboard = false;
@@ -82,15 +84,18 @@ export class EmployeeAddeditComponent implements OnInit {
     const selectDate = this.angForm.value.BirthDate.year + '-' + this.angForm.value.BirthDate.month + '-' + this.angForm.value.BirthDate.day;
     model.BirthDate = new Date(selectDate);
     console.log('this.angForm.value.BirthDate ', this.angForm.value.BirthDate);
+    this.spinner.show();
 
     if (this.mode === 'add') {
       this.employeeService.addEmployee(model).subscribe((data: any) => {
+        this.spinner.hide();
         this.toastr.success('Add employee is successful!', 'Success');
         this.redirectToEmployee();
       });
     } else if (this.mode === 'edit') {
       model.Id = this.employeeId;
       this.employeeService.editEmployee(model).subscribe((data: any) => {
+        this.spinner.hide();
         this.toastr.success('Edit employee is successful!', 'Success');
         this.redirectToEmployee();
       });
@@ -106,6 +111,7 @@ export class EmployeeAddeditComponent implements OnInit {
   }
 
   loadEmployee() {
+    this.spinner.show();
     this.employeeService.getEmployee(this.employeeId).subscribe((data: any) => {
       const birthDate = new Date(data.birthDate);
       console.log('birthDate = ', birthDate);
@@ -129,6 +135,7 @@ export class EmployeeAddeditComponent implements OnInit {
       });
       this.qualifications = data.employeeQualification;
       this.title = `${data.firstName} ${data.middleName} ${data.lastName}`;
+      this.spinner.hide();
     });
   }
 
