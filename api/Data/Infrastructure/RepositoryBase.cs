@@ -30,7 +30,7 @@ namespace api.Data.Infrastructure
 
         public virtual void Update(T entity)
         {
-            _EmployeeQualificationContext.Attach(entity);
+            dbSet.Attach(entity);
             _EmployeeQualificationContext.Entry(entity).State = EntityState.Modified;
         }
 

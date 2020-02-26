@@ -1,5 +1,6 @@
 <div class="card" style="min-width: 500px;">
   <div class="card-body">
+    <h5 class="card-title">{{title}}</h5>
     <form [formGroup]="angForm" novalidate>
       <div class="form-group">
         <label for="firstName">First Name</label>
@@ -49,9 +50,101 @@
         <label for="note">Note</label>
         <textarea class="form-control" rows = 7 cols = "5" formControlName="Note" #Note></textarea>
       </div>
-      <button class="btn" (click)="cancel()">Cancel</button>
-      <button type="submit" (click)="accept()" [disabled]="!angForm.valid" class="btn btn-primary">Accept</button>
+      <div class="float-right">
+        <button class="btn" (click)="redirectToEmployee()">Cancel</button>
+        <button type="submit" (click)="accept()" [disabled]="!angForm.valid" class="btn btn-primary">Accept</button>
+      </div>
+
     </form>
   </div>
 </div>
 
+<div class="card mt-3" *ngIf="mode === 'edit'">
+  <div class="card-body">
+    <h5 class="card-title">Qualification
+      <button class="btn btn-success float-right mb-3" (click)="openQualificationAdding(content)">Add</button>
+    </h5>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Imstitution</th>
+          <th scope="col">City</th>
+          <th scope="col">Valid From </th>
+          <th scope="col">Valid To</th>
+          <th scope="col">Is Valid?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of qualifications">
+          <th scope="row">{{item.id}}</th>
+          <td>{{item.name}}</td>
+          <td>{{item.institution}}</td>
+          <td>{{item.city}}</td>
+          <td>{{item.validFrom | date:'dd/MM/yyyy'}}</td>
+          <td>{{item.validTo | date:'dd/MM/yyyy'}}</td>
+          <td>
+            {{item.isValid}}
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div>
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add Qualification</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="qualificationForm" novalidate>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="Name" formControlName="Name"
+        #Name>
+      </div>
+      <div *ngIf="qualificationForm.controls['Name'].invalid && (qualificationForm.controls['Name'].dirty || qualificationForm.controls['Name'].touched)" class="alert alert-danger">
+        <div *ngIf="qualificationForm.controls['Name'].errors.required">
+          Name is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="Institution">Institution</label>
+        <input type="text" class="form-control" id="Institution" aria-describedby="Institution" placeholder="Institution" formControlName="Institution"
+        #Institution>
+      </div>
+      <div *ngIf="qualificationForm.controls['Institution'].invalid && (qualificationForm.controls['Institution'].dirty || qualificationForm.controls['Institution'].touched)" class="alert alert-danger">
+        <div *ngIf="qualificationForm.controls['Institution'].errors.required">
+          Name is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="City">City</label>
+        <input type="text" class="form-control" id="city" aria-describedby="City" placeholder="City" formControlName="City"
+        #City>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label for="ValidFrom">Valid From</label>
+          <input type="date" class="form-control" id="ValidFrom" aria-describedby="ValidFrom" placeholder="yyyy/mm/dd" formControlName="ValidFrom"
+          #ValidFrom>
+        </div>
+        <div class="col">
+          <label for="ValidTo">Valid To</label>
+          <input type="date" class="form-control" aria-describedby="ValidTo" placeholder="yyyy/mm/dd" name="ValidTo" formControlName="ValidTo" #ValidTo>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Cross click')">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="saveQualification()">Save</button>
+  </div>
+</ng-template>

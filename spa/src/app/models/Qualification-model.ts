@@ -1,5 +1,6 @@
-export default class QualificationModel {
-  Id: number;
+import EmployeeQualificationModel from './EmployeeQualification';
+
+export default class QualificationModel extends EmployeeQualificationModel {
   Name: string;
   Code: string;
 }

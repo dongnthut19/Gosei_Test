@@ -112,7 +112,7 @@ namespace api.Services
 
         public async ValueTask<Employee> GetById(int id)
         {
-            return await _employeeRepository.GetSingleByCondition(x => x.Id == id, new string[] { "EmployeeQualification" });
+            return await _employeeRepository.GetSingleByCondition(x => x.Id == id, new string[] { "EmployeeQualification", "EmployeeQualification.Qualification" });
         }
         
         public void Update(Employee model)

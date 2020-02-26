@@ -27,7 +27,7 @@
                                                       currentPage: currentPage,
                                                       totalItems: total }">
         <th scope="row">{{item.id}}</th>
-        <td><a [routerLink]="">{{item.firstName}}</a></td>
+        <td><a href="javascript:void(0)" (click)="edit(item.id)">{{item.firstName}}</a></td>
         <td>{{item.lastName}}</td>
         <td>{{item.gender}}</td>
         <td>{{item.birthDate | date:'dd/MM/yyyy'}}</td>

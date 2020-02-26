@@ -9,10 +9,10 @@ const routes: Routes = [
     path: 'employees/create',
     component: EmployeeAddeditComponent
   },
-  // {
-  //   path: 'employees/:id',
-  //   component: EmployeeAddeditComponent
-  // },
+  {
+    path: 'employees/edit',
+    component: EmployeeAddeditComponent
+  },
   {
     path: 'employees',
     component: EmployeeListComponent

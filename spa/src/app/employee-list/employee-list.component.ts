@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { EmployeeService } from '../services/employee.service';
 import { ConfirmationDialogService } from '../services/confirmation-dialog.service';
 import EmployeeModel from '../models/employee-model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-employee-list',
@@ -21,7 +22,8 @@ export class EmployeeListComponent implements OnInit {
 
   constructor(private employeeService: EmployeeService,
               private confirmationDialogService: ConfirmationDialogService,
-              private router: Router) { }
+              private router: Router,
+              private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.getEmployee();
@@ -62,11 +64,25 @@ export class EmployeeListComponent implements OnInit {
   deleteEmployee(employeeId: number) {
     this.employeeService.deleteEmployee(employeeId).subscribe(data => {
       this.getEmployee(this.currentPage);
+      this.toastr.success('Delete Employee is successful!', 'Success');
     });
   }
 
   redirectToCreate() {
     this.router.navigate(['employees/create']).then( (e) => {
+      if (e) {
+        console.log('Navigation is successful!');
+      }
+    });
+  }
+
+  edit(employeeId: number) {
+    this.router.navigate(['employees/edit'], {
+      queryParams: {
+        mode: 'edit',
+        id: employeeId,
+      }
+    }).then( (e) => {
       if (e) {
         console.log('Navigation is successful!');
       }

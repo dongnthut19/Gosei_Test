@@ -42,21 +42,58 @@ namespace api.Controllers
             });
         }
 
+        [Route("getbyid/{id}")]
         [HttpGet]
         public async Task<IActionResult> GetById(int id)
         {
             var obj = await _employeeService.GetById(id);
+            var employeeQualifications = obj.EmployeeQualification;
             var itemToReturn = _mapper.Map<EmployeeDto>(obj);
+
+            var objEmployeeQualification = new EmployeeQualificationDto();
+            itemToReturn.EmployeeQualification = new List<EmployeeQualificationDto>();
+            foreach (var item in employeeQualifications)
+            {
+                objEmployeeQualification = _mapper.Map<EmployeeQualificationDto>(item);
+
+                var valid = false;
+                if (item.ValidTo == null) {
+                    valid = true;
+                } else {
+                    if (item.ValidTo >= (DateTime?)DateTime.Now) {
+                        valid = true;
+                    }
+                }
+                objEmployeeQualification.IsValid = valid;
+                objEmployeeQualification.Name = item.Qualification.Name;
+
+                itemToReturn.EmployeeQualification.Add(objEmployeeQualification);
+            }
 
             return Ok(itemToReturn);
         }
 
+        [Route("add")]
         [HttpPost]
-        public IActionResult Add(EmployeeDto employee)
+        public IActionResult Add([FromBody]EmployeeDto employee)
         {
             var newItem = new Employee();
             newItem.UpdateEmployee(employee);
             _employeeService.Add(newItem);
+            _employeeService.SaveChanges();
+            return CreatedAtAction(nameof(GetById), new { id = employee.Id }, employee);
+        }
+
+        [Route("edit")]
+        [HttpPost]
+        public async Task<IActionResult> Edit([FromBody]EmployeeDto employee)
+        {
+            var newItem = await _employeeService.GetById(employee.Id);
+            if (newItem == null) {
+                return NotFound();
+            }
+            newItem.UpdateEmployee(employee);
+            _employeeService.Update(newItem);
             _employeeService.SaveChanges();
             return CreatedAtAction(nameof(GetById), new { id = employee.Id }, employee);
         }
