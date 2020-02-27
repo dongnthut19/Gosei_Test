@@ -145,6 +145,6 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" (click)="c('Cross click')">Cancel</button>
-    <button type="button" class="btn btn-primary" (click)="saveQualification()">Save</button>
+    <button type="button" class="btn btn-primary" [disabled]="!qualificationForm.valid" (click)="saveQualification()">Save</button>
   </div>
 </ng-template>

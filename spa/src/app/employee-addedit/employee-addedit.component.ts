@@ -145,6 +145,9 @@ export class EmployeeAddeditComponent implements OnInit {
 
   saveQualification() {
     if (this.mode === 'edit') {
+      if (this.qualificationForm.invalid) {
+        return;
+      }
       const model = this.qualificationForm.value;
       model.EmployeeId = this.employeeId;
       this.employeeService.addQualification(model).subscribe((data: any) => {
